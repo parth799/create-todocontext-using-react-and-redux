@@ -9,42 +9,62 @@ function AddRowForm({ onClose }) {
   const [rowData, setRowData] = useState({});
   const [error, setError] = useState({});
   const dispatch = useDispatch();
-console.log("<<<<<<",columns);
+  console.log("<<<<<<", columns);
 
-const validateInput = (column, value) => {
-  let isValid = true;
-  let errormessage = '';
+  const validateInput = (column, value) => {
+    let isValid = true;
+    let errorMessage = '';
 
-  if (column.type === 'string') {
-    if (!/^[a-zA-Z]+$/.test(value)) {
+    if (!value) {
       isValid = false;
-      errormessage = 'only charecter fieldm is required.';
-    }
-  }else if(column.type === 'number') {
-    if (!/^\d+$/.test(value)) {
+      errorMessage = 'This field is required.';
+    } else if (column.type === 'number' && !/^\d+$/.test(value)) {
       isValid = false;
-      errormessage = 'This field is required and should be a number.'
+      errorMessage = 'This field should be a number.';
+    } else if (column.type === 'text' && !/^(?=.*[a-zA-Z])(?=.*\d).+$/.test(value)) {
+      isValid = false;
+      errorMessage = 'This field should contain both letters and numbers.';
     }
-  }
-  setError((prevErrors) => ({
-    ...prevErrors,[column.columnName]:errormessage
-  }));
-  return isValid;
-}
+
+    setError((prevErrors) => ({
+      ...prevErrors, [column.columnName]: errorMessage
+    }));
+    return isValid;
+  };
+
   const handleInputChange = (columnName, value) => {
-    const columa = columns.find((col) => col.columnName === columnName);
-    if(validateInput(columa, value)){
+    const column = columns.find((col) => col.columnName === columnName);
+    if (validateInput(column, value)) {
       setRowData({ ...rowData, [columnName]: value });
+    } else {
+      setRowData((prevData) => {
+        const newData = { ...prevData };
+        delete newData[columnName];
+        return newData;
+      });
     }
   };
 
   const handleAddRow = () => {
-    if (Object.values(error).some((error) => error)) {
+    const newErrors = {};
+    let hasError = false;
+
+    columns.forEach((column) => {
+      if (!rowData[column.columnName]) {
+        newErrors[column.columnName] = 'This field is required.';
+        hasError = true;
+      }
+    });
+
+    setError(newErrors);
+
+    if (hasError) {
       toast.error('Please fix validation errors before submitting.');
       return;
     }
+
     dispatch(addRow(rowData));
-    toast.success('Row added successfully');
+    toast.success('Row added successfully!');
     onClose();
   };
 
@@ -56,7 +76,7 @@ const validateInput = (column, value) => {
           <div key={index} className="mb-4">
             <label className="block text-gray-700 mb-2">{column.columnName}</label>
             <input
-              type={column.type === 'number' ? 'number' : 'string'}
+              type={column.type === 'number' ? 'number' : 'text'}
               onChange={(e) => handleInputChange(column.columnName, e.target.value)}
               className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -66,12 +86,11 @@ const validateInput = (column, value) => {
           </div>
         ))}
         <div className="flex justify-between">
-
           <button
             onClick={onClose}
             className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400"
           >
-            Cancle
+            Cancel
           </button>
           <button
             onClick={handleAddRow}

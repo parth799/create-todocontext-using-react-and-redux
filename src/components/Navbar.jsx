@@ -1,12 +1,15 @@
 /* eslint-disable react/prop-types */
 // import React from 'react';
 
+import { toast } from "react-toastify";
+
 
 function Navbar({ onAddColumnClick }) {
 
   const removetable = () => {
     localStorage.clear();
     window.location.reload();
+    toast.success("table has been deleted!")
   }
 
   return (

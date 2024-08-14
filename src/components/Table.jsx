@@ -2,10 +2,12 @@
 /* eslint-disable react/prop-types */
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { setRows,setColumns } from '../redux/columnSlice';
+import { setRows, setColumns } from '../redux/columnSlice';
 import { MdDelete } from "react-icons/md";
 import EditRowForm from './EditRowForm';
 import { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Table({ onAddRowClick }) {
   const [EditRowFormVisible, setEditRowFormVisible] = useState(null);
@@ -16,29 +18,22 @@ function Table({ onAddRowClick }) {
   if (!columns || columns.length === 0) {
     return <div className='text-center'>No columns available. Please add a column.</div>;
   }
-  // console.log("-------", columns);
 
   const handleDeleteRow = (rowIndex) => {
     const updatedRows = rows.filter((_, index) => index !== rowIndex);
-    // console.log("><><><><>",updatedRows);
-    
     dispatch(setRows(updatedRows));
     localStorage.setItem('rows', JSON.stringify(updatedRows));
+    toast.success('Row deleted successfully!');
   };
 
   const handleDeleteColuman = (columnIndex) => {
     const updatedColumns = columns.filter((_, index) => index !== columnIndex);
-    // console.log("////",updatedColumns);
-    
     dispatch(setColumns(updatedColumns));
     localStorage.setItem('columns', JSON.stringify(updatedColumns));
 
     const updatedRows = rows.map((row) => {
       const newRow = { ...row };
-      console.log(">>>",newRow);
-      
       delete newRow[columns[columnIndex].columnName];
-      console.log(">>>++++++",newRow);
       return newRow;
     });
     dispatch(setRows(updatedRows));
@@ -52,8 +47,10 @@ function Table({ onAddRowClick }) {
   const handleCloseEditForm = () => {
     setEditRowFormVisible(null);
   }
+
   return (
     <div className="overflow-x-auto p-4">
+      <ToastContainer />
       <table className="min-w-full bg-white border">
         <thead className=" text-white">
           <tr>
@@ -78,7 +75,7 @@ function Table({ onAddRowClick }) {
                 </td>
               ))}
               <td className="py-2 px-4 border-b flex gap-4 justify-center">
-              <button
+                <button
                   onClick={() => handleEditRow(index)}
                   className="bg-green-500 text-white py-1 px-2 rounded "
                 >
@@ -90,19 +87,17 @@ function Table({ onAddRowClick }) {
                 >
                   Delete
                 </button>
-                
               </td>
             </tr>
           ))}
         </tbody>
-      </table>{
-        EditRowFormVisible !== null &&(
-          <EditRowForm
-            rowIndex={EditRowFormVisible}
-            onClose={handleCloseEditForm}
-          />
-        ) 
-      }
+      </table>
+      {EditRowFormVisible !== null && (
+        <EditRowForm
+          rowIndex={EditRowFormVisible}
+          onClose={handleCloseEditForm}
+        />
+      )}
     </div>
   );
 }
