@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,16 +16,18 @@ function EditRowForm({ rowIndex, onClose }) {
     let isValid = true;
     let errorMessage = "";
 
-    if (column.type === "string") {
-      if (!/^[a-zA-Z]+$/.test(value)) {
-        isValid = false;
-        errorMessage = "0nly letters are allowed for this column.";
-      }
-    } else if (column.type === "number") {
-      if (!/^\d+$/.test(value)) {
-        isValid = false;
-        errorMessage = "numbers are allowed for this column.";
-      }
+    if (!value) {
+      isValid = false;
+      errorMessage = "This field is required.";
+    } else if (column.type === "number" && !/^\d+$/.test(value)) {
+      isValid = false;
+      errorMessage = "This field should be a number.";
+    } else if (column.type === "string" && !/^[a-zA-Z]/.test(value)) {
+      isValid = false;
+      errorMessage = "The first character should not be a digit.";
+    } else if (column.type === "email" && !/^([a-zA-Z0-9_.\-])+@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(value)) {
+      isValid = false;
+      errorMessage = "Invalid email format.";
     }
 
     setErrors((prevErrors) => ({
@@ -66,7 +69,7 @@ function EditRowForm({ rowIndex, onClose }) {
               {column.columnName}
             </label>
             <input
-              type={column.type === "number" ? "number" : "text"}
+              type={column.type === "number" ? "number" : column.type === "email" ? "email" : "text"}
               value={rowData[column.columnName] || ""}
               onChange={(e) =>
                 handleInputChange(column.columnName, e.target.value)
