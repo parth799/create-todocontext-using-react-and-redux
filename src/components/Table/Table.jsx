@@ -4,10 +4,9 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { setRows, setColumns } from "../../redux/columnSlice";
 import { MdDelete } from "react-icons/md";
-import EditRowForm from "../EditRowForm";
+import EditRowForm from "./components/EditRowForm";
 import { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 
 function Table({ onAddRowClick }) {
   const [EditRowFormVisible, setEditRowFormVisible] = useState(null);
@@ -54,7 +53,6 @@ function Table({ onAddRowClick }) {
 
   return (
     <div className="overflow-x-auto p-4">
-      <ToastContainer />
       <table className="min-w-full bg-white border">
         <thead className=" text-white">
           <tr>

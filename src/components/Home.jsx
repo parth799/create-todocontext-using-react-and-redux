@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Navbar from "./Navbar";
-import AddColumnForm from "./AddColumnForm";
-import AddRowForm from "./AddRowForm";
-import Table from "./Table";
+import AddColumnForm from "./Table/components/AddColumnForm";
+import AddRowForm from "./Table/components/AddRowForm";
+import Table from "./Table/Table";
 import { setColumns, setRows } from "../redux/columnSlice";
 
 function Home() {

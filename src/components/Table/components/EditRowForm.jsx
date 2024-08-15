@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setRows } from "../redux/columnSlice";
+import { setRows } from "../../../redux/columnSlice";
 import { toast } from "react-toastify";
 
 function EditRowForm({ rowIndex, onClose }) {
