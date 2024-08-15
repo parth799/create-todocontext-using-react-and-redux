@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addColumn } from "../redux/columnSlice";
+import { addColumn } from "../../../redux/columnSlice";
 import { toast } from "react-toastify";
 
 function AddColumnForm({ onClose }) {
