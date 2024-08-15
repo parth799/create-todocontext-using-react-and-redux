@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { addRow } from '../redux/columnSlice';
-import { toast } from 'react-toastify';
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addRow } from "../redux/columnSlice";
+import { toast } from "react-toastify";
 
 function AddRowForm({ onClose }) {
   const columns = useSelector((state) => state.columns.columns);
@@ -13,21 +13,22 @@ function AddRowForm({ onClose }) {
 
   const validateInput = (column, value) => {
     let isValid = true;
-    let errorMessage = '';
+    let errorMessage = "";
 
     if (!value) {
       isValid = false;
-      errorMessage = 'This field is required.';
-    } else if (column.type === 'number' && !/^\d+$/.test(value)) {
+      errorMessage = "This field is required.";
+    } else if (column.type === "number" && !/^\d+$/.test(value)) {
       isValid = false;
-      errorMessage = 'This field should be a number.';
-    } else if (column.type === 'text' && !/^(?=.*[a-zA-Z])(?=.*\d).+$/.test(value)) {
+      errorMessage = "This field should be a number.";
+    } else if (column.type === "string" && /^\d/.test(value)) {
       isValid = false;
-      errorMessage = 'This field should contain both letters and numbers.';
+      errorMessage = "first charecter shoud not be initgere";
     }
 
     setError((prevErrors) => ({
-      ...prevErrors, [column.columnName]: errorMessage
+      ...prevErrors,
+      [column.columnName]: errorMessage,
     }));
     return isValid;
   };
@@ -51,7 +52,7 @@ function AddRowForm({ onClose }) {
 
     columns.forEach((column) => {
       if (!rowData[column.columnName]) {
-        newErrors[column.columnName] = 'This field is required.';
+        newErrors[column.columnName] = "This field is required.";
         hasError = true;
       }
     });
@@ -59,12 +60,12 @@ function AddRowForm({ onClose }) {
     setError(newErrors);
 
     if (hasError) {
-      toast.error('Please fix validation errors before submitting.');
+      toast.error("Please fix validation errors before submitting.");
       return;
     }
 
     dispatch(addRow(rowData));
-    toast.success('Row added successfully!');
+    toast.success("Row added successfully!");
     onClose();
   };
 
@@ -74,10 +75,14 @@ function AddRowForm({ onClose }) {
         <h2 className="text-xl font-semibold mb-4">Add data</h2>
         {columns.map((column, index) => (
           <div key={index} className="mb-4">
-            <label className="block text-gray-700 mb-2">{column.columnName}</label>
+            <label className="block text-gray-700 mb-2">
+              {column.columnName}
+            </label>
             <input
-              type={column.type === 'number' ? 'number' : 'text'}
-              onChange={(e) => handleInputChange(column.columnName, e.target.value)}
+              type={column.type === "number" ? "number" : "string"}
+              onChange={(e) =>
+                handleInputChange(column.columnName, e.target.value)
+              }
               className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {error[column.columnName] && (

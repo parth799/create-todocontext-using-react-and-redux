@@ -1,29 +1,29 @@
 /* eslint-disable react/prop-types */
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { addColumn } from '../redux/columnSlice';
-import { toast } from 'react-toastify';
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addColumn } from "../redux/columnSlice";
+import { toast } from "react-toastify";
 
 function AddColumnForm({ onClose }) {
-  const [columnName, setColumnName] = useState('');
-  const [type, setType] = useState('string');
-  const [primary, setPrimary] = useState('noneprimary');
-  const [error, setError] = useState('');
+  const [columnName, setColumnName] = useState("");
+  const [type, setType] = useState("string");
+  const [primary, setPrimary] = useState("noneprimary");
+  const [error, setError] = useState("");
   const dispatch = useDispatch();
 
   const handleAddColumn = () => {
     if (!columnName.trim()) {
-      setError('Column Name cannot be empty');
+      setError("columan Name cannot be empty");
       return;
     }
 
     if (!type.trim()) {
-      setError('Type must be selected');
+      setError("type must be selected!");
       return;
     }
-    setError('');
+    setError("");
     dispatch(addColumn({ columnName, type, primary }));
-    toast.success('Column added successfully')
+    toast.success("Column added successfully");
     onClose();
   };
 
@@ -31,9 +31,7 @@ function AddColumnForm({ onClose }) {
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
       <div className="bg-white p-6 rounded-lg shadow-lg w-96">
         <h2 className="text-xl font-semibold mb-4">Add Column</h2>
-        {error && (
-          <div className="text-red-500">{error}</div>
-        )}
+        {error && <div className="text-red-500">{error}</div>}
         <div className="mb-4">
           <label className="block text-gray-700 mb-2">Column Name</label>
           <input
@@ -52,8 +50,8 @@ function AddColumnForm({ onClose }) {
               <input
                 type="radio"
                 value="primary"
-                checked={primary === 'primary'}
-                onChange={() => setPrimary('primary')}
+                checked={primary === "primary"}
+                onChange={() => setPrimary("primary")}
                 className="mr-2"
               />
               Primary
@@ -62,15 +60,14 @@ function AddColumnForm({ onClose }) {
               <input
                 type="radio"
                 value="noneprimary"
-                checked={primary === 'noneprimary'}
-                onChange={() => setPrimary('noneprimary')}
+                checked={primary === "noneprimary"}
+                onChange={() => setPrimary("noneprimary")}
                 className="mr-2"
               />
               None Primary
             </label>
           </div>
         </div>
-
 
         <div className="mb-4">
           <label className="block text-gray-700 mb-2">Type</label>
@@ -83,9 +80,8 @@ function AddColumnForm({ onClose }) {
             <option value="string">String</option>
           </select>
         </div>
-        
+
         <div className="flex justify-between">
-          
           <button
             onClick={onClose}
             className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400"

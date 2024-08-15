@@ -1,13 +1,13 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import { setRows, setColumns } from '../redux/columnSlice';
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { setRows, setColumns } from "../redux/columnSlice";
 import { MdDelete } from "react-icons/md";
-import EditRowForm from './EditRowForm';
-import { useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import EditRowForm from "./EditRowForm";
+import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Table({ onAddRowClick }) {
   const [EditRowFormVisible, setEditRowFormVisible] = useState(null);
@@ -16,20 +16,24 @@ function Table({ onAddRowClick }) {
   const dispatch = useDispatch();
 
   if (!columns || columns.length === 0) {
-    return <div className='text-center'>No columns available. Please add a column.</div>;
+    return (
+      <div className="text-center">
+        No columns available. Please add a column.
+      </div>
+    );
   }
 
   const handleDeleteRow = (rowIndex) => {
     const updatedRows = rows.filter((_, index) => index !== rowIndex);
     dispatch(setRows(updatedRows));
-    localStorage.setItem('rows', JSON.stringify(updatedRows));
-    toast.success('Row deleted successfully!');
+    localStorage.setItem("rows", JSON.stringify(updatedRows));
+    toast.success("Row deleted successfully!");
   };
 
   const handleDeleteColuman = (columnIndex) => {
     const updatedColumns = columns.filter((_, index) => index !== columnIndex);
     dispatch(setColumns(updatedColumns));
-    localStorage.setItem('columns', JSON.stringify(updatedColumns));
+    localStorage.setItem("columns", JSON.stringify(updatedColumns));
 
     const updatedRows = rows.map((row) => {
       const newRow = { ...row };
@@ -37,16 +41,16 @@ function Table({ onAddRowClick }) {
       return newRow;
     });
     dispatch(setRows(updatedRows));
-    localStorage.setItem('rows', JSON.stringify(updatedRows));
+    localStorage.setItem("rows", JSON.stringify(updatedRows));
   };
 
   const handleEditRow = (rowIndex) => {
     setEditRowFormVisible(rowIndex);
-  }
+  };
 
   const handleCloseEditForm = () => {
     setEditRowFormVisible(null);
-  }
+  };
 
   return (
     <div className="overflow-x-auto p-4">
@@ -58,12 +62,16 @@ function Table({ onAddRowClick }) {
               <th key={index} className="py-2 px-4  text-black border-b">
                 {column.columnName}
                 {column.primary === "noneprimary" && (
-                  <MdDelete onClick={() => handleDeleteColuman(index)}
-                  className='inline ml-2 cursor-pointer' />
+                  <MdDelete
+                    onClick={() => handleDeleteColuman(index)}
+                    className="inline ml-2 cursor-pointer"
+                  />
                 )}
               </th>
             ))}
-            <th className="py-2 px-4 text-black border-b text-center">Actions</th>
+            <th className="py-2 px-4 text-black border-b text-center">
+              Actions
+            </th>
           </tr>
         </thead>
         <tbody>

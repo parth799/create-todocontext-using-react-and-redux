@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setRows } from '../redux/columnSlice';
-import { toast } from 'react-toastify';
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setRows } from "../redux/columnSlice";
+import { toast } from "react-toastify";
 
 function EditRowForm({ rowIndex, onClose }) {
   const columns = useSelector((state) => state.columns.columns);
@@ -13,17 +13,17 @@ function EditRowForm({ rowIndex, onClose }) {
 
   const validateInput = (column, value) => {
     let isValid = true;
-    let errorMessage = '';
+    let errorMessage = "";
 
-    if (column.type === 'string') {
+    if (column.type === "string") {
       if (!/^[a-zA-Z]+$/.test(value)) {
         isValid = false;
-        errorMessage = '0nly letters are allowed for this column.';
+        errorMessage = "0nly letters are allowed for this column.";
       }
-    } else if (column.type === 'number') {
+    } else if (column.type === "number") {
       if (!/^\d+$/.test(value)) {
         isValid = false;
-        errorMessage = 'numbers are allowed for this column.';
+        errorMessage = "numbers are allowed for this column.";
       }
     }
 
@@ -44,15 +44,15 @@ function EditRowForm({ rowIndex, onClose }) {
 
   const handleSaveRow = () => {
     if (Object.values(errors).some((error) => error)) {
-      toast.error('Please fix validation errors before saving.');
+      toast.error("Please fix validation errors before saving11");
       return;
     }
-    const updatedRows = rows.map((row, index) => 
+    const updatedRows = rows.map((row, index) =>
       index === rowIndex ? rowData : row
     );
     dispatch(setRows(updatedRows));
-    localStorage.setItem('rows', JSON.stringify(updatedRows));
-    toast.success('Rows saved successfully');
+    localStorage.setItem("rows", JSON.stringify(updatedRows));
+    toast.success("Rows saved successfully!");
     onClose();
   };
 
@@ -62,15 +62,21 @@ function EditRowForm({ rowIndex, onClose }) {
         <h2 className="text-xl font-semibold mb-4">Edit Row</h2>
         {columns.map((column, index) => (
           <div key={index} className="mb-4">
-            <label className="block text-gray-700 mb-2">{column.columnName}</label>
+            <label className="block text-gray-700 mb-2">
+              {column.columnName}
+            </label>
             <input
-              type={column.type === 'number' ? 'number' : 'text'}
-              value={rowData[column.columnName] || ''}
-              onChange={(e) => handleInputChange(column.columnName, e.target.value)}
+              type={column.type === "number" ? "number" : "text"}
+              value={rowData[column.columnName] || ""}
+              onChange={(e) =>
+                handleInputChange(column.columnName, e.target.value)
+              }
               className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {errors[column.columnName] && (
-              <p className="text-red-500 text-sm">{errors[column.columnName]}</p>
+              <p className="text-red-500 text-sm">
+                {errors[column.columnName]}
+              </p>
             )}
           </div>
         ))}
