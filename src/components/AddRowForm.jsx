@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,9 +22,12 @@ function AddRowForm({ onClose }) {
     } else if (column.type === "number" && !/^\d+$/.test(value)) {
       isValid = false;
       errorMessage = "This field should be a number.";
-    } else if (column.type === "string" && /^\d/.test(value)) {
+    } else if (column.type === "string" && !/^[a-zA-Z]/.test(value)) {
       isValid = false;
-      errorMessage = "first charecter shoud not be initgere";
+      errorMessage = "The first character should not be a digit.";
+    } else if (column.type === "email" && !/^([a-zA-Z0-9_.\-])+@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(value)) {
+      isValid = false;
+      errorMessage = "Invalid email format.";
     }
 
     setError((prevErrors) => ({
@@ -79,7 +83,7 @@ function AddRowForm({ onClose }) {
               {column.columnName}
             </label>
             <input
-              type={column.type === "number" ? "number" : "string"}
+              type={column.type === "number" ? "number" : column.type === "email" ? "email" : "text"}
               onChange={(e) =>
                 handleInputChange(column.columnName, e.target.value)
               }

@@ -78,6 +78,7 @@ function AddColumnForm({ onClose }) {
           >
             <option value="number">number</option>
             <option value="string">String</option>
+            <option value="email">Email</option>
           </select>
         </div>
 
